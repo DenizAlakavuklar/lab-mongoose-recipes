@@ -19,14 +19,14 @@ mongoose
   })
   .then(() => {
     // Run your code here, after you have insured that the connection was made
-    console.log (data[0].title);
+    console.log(data[0].title);
     return Recipe.create(data[0]);
-    })
+  })
   .catch(error => {
     console.error('Error connecting to the database', error);
   });
 
-  mongoose
+mongoose
   .connect(MONGODB_URI)
   .then(x => {
     console.log(`Connected to the database: "${x.connection.name}"`);
@@ -35,12 +35,28 @@ mongoose
   })
   .then(() => {
     // Run your code here, after you have insured that the connection was made
-   for (let i=0; i<data.length; i++) {
-    console.log (data[i].title)
-  };
+    for (let i = 0; i < data.length; i++) {
+      console.log(data[i].title)
+    };
     return Recipe.insertMany(data);
-    })
-  .catch(error => {
+  })
+  .catch((error) => {
+    console.error('Error connecting to the database', error);
+  });
+
+mongoose
+  .connect(MONGODB_URI)
+  .then(x => {
+    console.log(`Connected to the database: "${x.connection.name}"`);
+    // Before adding any recipes to the database, let's remove all existing ones
+    return Recipe.deleteMany();
+  })
+  .then(() => {
+    // Run your code here, after you have insured that the connection was made
+    console.log("Success!");
+    return Recipe.findOneAndUpdate({ title: "Rigatoni alla Genovese" }, { duration: 100 }, { new: true })
+  })
+  .catch((error) => {
     console.error('Error connecting to the database', error);
   });
 
